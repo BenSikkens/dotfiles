@@ -51,5 +51,3 @@ alias prettyjson="python -m json.tool"
 #   -----------------------------
 #   WORK RELATED STUFF
 #   -----------------------------
-
-alias bastion='ssh bsikkens@bastion.rijksoverheid.nl'
