@@ -40,7 +40,7 @@ extract () {
 #   -----------------------------
 tabrem () {
   if [ -f $1 ] ; then
-    cat "$1" | sed -e "s/[[:space:]]+/    /g"
+    cat "$1" | sed -E "s/[[:space:]]+/    /g"
   fi
 }
 
