@@ -36,6 +36,15 @@ extract () {
 }
 
 #   -----------------------------
+#   tabCleaner:  remove tabs from file
+#   -----------------------------
+tabrem () {
+  if [ -f $1 ] ; then
+    cat "$1" | sed -e "s/[[:space:]]+/    /g"
+  fi
+}
+
+#   -----------------------------
 #   cleanupDS:  Recursively delete .DS_Store files
 #   -----------------------------
 
