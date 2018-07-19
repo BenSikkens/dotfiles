@@ -1,5 +1,5 @@
-export PS1="\u@\h:\w\`parse_git_branch\`\\$ "
-
+PS1="\u@\h:\w\`parse_git_branch\`\\$ "
+export PS1
 # Setting PATH for Python 3.6
 # The original version is saved in .bash_profile.pysave
 PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
@@ -21,7 +21,7 @@ function parse_git_branch() {
 		STAT=`parse_git_dirty`
 		echo "[${BRANCH}${STAT}]"
 	else
-		echo ""
+		echo ""x  x
 	fi
 }
 
