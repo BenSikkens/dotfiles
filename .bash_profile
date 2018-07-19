@@ -1,13 +1,78 @@
-PS1="\u@\h:\w\`parse_git_branch\`\\$ "
-export PS1
+#PS1="\u@\h:\w\`parse_git_branch\`\\$ "
+#export PS1
 # Setting PATH for Python 3.6
 # The original version is saved in .bash_profile.pysave
 PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
 export PATH
 
-alias ll='ls -FGlAhp'
-alias ls='ls -GFh'
-alias path='echo -e ${PATH//:/\\n}'
+# Color config for git-prompt
+
+MAGENTA="\[\033[0;35m\]"
+YELLOW="\[\033[01;32m\]"
+BLUE="\[\033[00;34m\]"
+LIGHT_GRAY="\[\033[0;37m\]"
+CYAN="\[\033[01;36m\]"
+GREEN="\[\033[00m\]"
+RED="\[\033[0;31m\]"
+VIOLET='\[\033[01;35m\]'
+
+__short_current_location="\W"              # capital 'W': current directory,
+__long_current_location="\w"               # small 'w': full file path
+
+if [[ -z LONG_PROMPT ]] ; then
+  LONG_PROMPT='true'
+fi
+
+function color_my_prompt {
+  __user_and_host="$GREEN\u@\h"
+  if [[ $LONG_PROMPT == 'true' ]]; then
+    __cur_location="$BLUE\w"
+  else
+    __cur_location="$BLUE\W"
+  fi
+  __git_branch_color="$GREEN"
+  __prompt_tail="$MAGENTA$ "
+  __user_input_color="$GREEN"
+  __git_branch='$(__git_ps1)';
+
+  # colour branch name depending on state
+  if [[ "$(__git_ps1)" =~ "*" ]]; then     # if repository is dirty
+      __git_branch_color="$RED"
+  elif [[ "$(__git_ps1)" =~ "$" ]]; then   # if there is something stashed
+      __git_branch_color="$YELLOW"
+  elif [[ "$(__git_ps1)" =~ "%" ]]; then   # if there are only untracked files
+      __git_branch_color="$LIGHT_GRAY"
+  elif [[ "$(__git_ps1)" =~ "+" ]]; then   # if there are staged files
+      __git_branch_color="$CYAN"
+  fi
+
+  # Build the PS1 (Prompt String)
+  PS1="$__user_and_host $__cur_location$__git_branch_color$__git_branch $__prompt_tail$__user_input_color "
+}
+
+function shorten_my_prompt {
+  LONG_PROMPT='false'
+
+}
+
+function lengthen_my_promt {
+  LONG_PROMPT='true'
+}
+
+
+# configure PROMPT_COMMAND which is executed each time before PS1
+export PROMPT_COMMAND=color_my_prompt
+
+# if .git-prompt.sh exists, set options and execute it
+if [ -f ~/.git-prompt.sh ]; then
+  GIT_PS1_SHOWDIRTYSTATE=true
+  GIT_PS1_SHOWSTASHSTATE=true
+  GIT_PS1_SHOWUNTRACKEDFILES=true
+  GIT_PS1_SHOWUPSTREAM="auto"
+  GIT_PS1_HIDE_IF_PWD_IGNORED=true
+  GIT_PS1_SHOWCOLORHINTS=true
+  . ~/.git-prompt.sh
+fi
 
 #   -----------------------------
 #   some GIT stuff for the prompt: parse_git_branch and parse_git_dirty
@@ -21,7 +86,7 @@ function parse_git_branch() {
 		STAT=`parse_git_dirty`
 		echo "[${BRANCH}${STAT}]"
 	else
-		echo ""x  x
+		echo ""
 	fi
 }
 
@@ -87,13 +152,31 @@ extract () {
 
 #   -----------------------------
 #   tabCleaner:  remove tabs from file
-#   Be aware this is optimzed for MacOS
 #   -----------------------------
+
 tabrem () {
   if [ -f $1 ] ; then
     cat "$1" | sed -E "s/[[:space:]]+/    /g"
   fi
 }
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+#   -----------------------------
+#   some basic aliasses
+#   -----------------------------
+
+alias ll='ls -FGlAhp'
+alias ls='ls -GFh'
+alias path='echo -e ${PATH//:/\\n}'
+alias smp='shorten_my_prompt'
+alias lmp='lenghten_my_prompt'
 
 #   -----------------------------
 #   cleanupDS:  Recursively delete .DS_Store files
@@ -107,7 +190,6 @@ alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
 
 alias prettyjson="python -m json.tool"
 
-
 #   -----------------------------
-#   WORK RELATED STUFF
+#   WORK RELATED ALIASSES
 #   -----------------------------
