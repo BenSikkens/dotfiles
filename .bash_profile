@@ -56,7 +56,7 @@ function color_my_prompt {
 
   # Build the PS1 (Prompt String)
   PS1="$__user_and_host $__cur_location$__git_branch_color$__git_branch $__prompt_tail$__user_input_color "
-}
+} 
 
 # configure PROMPT_COMMAND which is executed each time before PS1
 export PROMPT_COMMAND=color_my_prompt
