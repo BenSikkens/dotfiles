@@ -1,25 +1,132 @@
-#COLORS FOR PROMPT
+#colors for PROMPT
 
-# COLOR META
-COLORSTARTSEQUENCE="\[\033["
-COLORENDSEQUENCE="M\]"
-ENDCOLORISATION="\033[0M\]"
+# Color Meta
+colorstartsequence="\[\033["
+colorendsequence="m\]"
+endcolorisation="\[\033[0m\]"
 
 
-# COLORS
-BLACK="${COLORSTARTSEQUENCE}0;30${COLORENDSEQUENCE}"
-BLACKB="${COLORSTARTSEQUENCE}1;30${COLORENDSEQUENCE}"
-WHITE="${COLORSTARTSEQUENCE}0;37${COLORENDSEQUENCE}"
-WHITEB="${COLORSTARTSEQUENCE}1;37${COLORENDSEQUENCE}"
-RED="${COLORSTARTSEQUENCE}0;31${COLORENDSEQUENCE}"
-REDB="${COLORSTARTSEQUENCE}1;31${COLORENDSEQUENCE}"
-GREEN="${COLORSTARTSEQUENCE}0;32${COLORENDSEQUENCE}"
-GREENB="${COLORSTARTSEQUENCE}1;32${COLORENDSEQUENCE}"
-YELLOW="${COLORSTARTSEQUENCE}0;33${COLORENDSEQUENCE}"
-YELLOWB="${COLORSTARTSEQUENCE}1;33${COLORENDSEQUENCE}"
-BLUE="${COLORSTARTSEQUENCE}0;34${COLORENDSEQUENCE}"
-BLUEB="${COLORSTARTSEQUENCE}1;34${COLORENDSEQUENCE}"
-PURPLE="${COLORSTARTSEQUENCE}0;35${COLORENDSEQUENCE}"
-PURPLEB="${COLORSTARTSEQUENCE}1;35${COLORENDSEQUENCE}"
-LIGHTBLUE="${COLORSTARTSEQUENCE}0;36${COLORENDSEQUENCE}"
-LIGHTBLUEB="${COLORSTARTSEQUENCE}1;36${COLORENDSEQUENCE}"
+# Colors
+black="${colorstartsequence}0;30${colorendsequence}"
+blackb="${colorstartsequence}1;30${colorendsequence}"
+white="${colorstartsequence}0;37${colorendsequence}"
+whiteb="${colorstartsequence}1;37${colorendsequence}"
+red="${colorstartsequence}0;31${colorendsequence}"
+redb="${colorstartsequence}1;31${colorendsequence}"
+green="${colorstartsequence}0;32${colorendsequence}"
+greenb="${colorstartsequence}1;32${colorendsequence}"
+yellow="${colorstartsequence}0;33${colorendsequence}"
+yellowb="${colorstartsequence}1;33${colorendsequence}"
+blue="${colorstartsequence}0;34${colorendsequence}"
+blueb="${colorstartsequence}1;34${colorendsequence}"
+purple="${colorstartsequence}0;35${colorendsequence}"
+purpleb="${colorstartsequence}1;35${colorendsequence}"
+lightblue="${colorstartsequence}0;36${colorendsequence}"
+lightblueb="${colorstartsequence}1;36${colorendsequence}"
+
+
+
+function black {
+  echo -e "$black${@}$endcolorisation"
+}
+
+function blackb {
+  echo -e "${blackb}${@}${endcolorisation}"
+}
+
+function white {
+  echo -e "${white}${@}${endcolorisation}"
+}
+
+function whiteb {
+  echo -e "${whiteb}${@}${endcolorisation}"
+}
+
+function red {
+  echo -e "${red}${@}${endcolorisation}"
+}
+
+function redb {
+  echo -e "${redb}${@}${endcolorisation}"
+}
+
+function green {
+  echo -e "${green}${@}${endcolorisation}"
+}
+
+function greenb {
+  echo -e "${greenb}${@}${endcolorisation}"
+}
+
+function yellow {
+  echo -e "${yellow}${@}${endcolorisation}"
+}
+
+function yellowb {
+  echo -e "${yellowb}${@}${endcolorisation}"
+}
+
+function blue {
+  echo -e "${blue}${@}${endcolorisation}"
+}
+
+function blueb {
+  echo -e "${blueb}${@}${endcolorisation}"
+}
+
+function purple {
+  echo -e "${purple}${@}${endcolorisation}"
+}
+
+function purpleb {
+  echo -e "${purpleb}${@}${endcolorisation}"
+}
+
+function lightblue {
+  echo -e "${lightblue}${@}${endcolorisation}"
+}
+
+function lightblueb {
+  echo -e "${lightblueb}${@}${endcolorisation}"
+}
+
+function colors {
+  black "0;30" "black"
+  blackb "1;30" "blackb"
+  white "0;37" "white"
+  whiteb "1;37" "whiteb"
+  red "0;31" "red"
+  redb "1;31" "redb"
+  green "0;32" "green"
+  greenb "1;32" "greenb"
+  yellow "0;33" "yellow"
+  yellowb "1;33" "yellowb"
+  blue "0;34" "blue"
+  blueb "1;30" "blueb"
+  purple "0;35" "purple"
+  purpleb "1;35" "purpleb"
+  lightblue "0;36" "lightblue"
+  lightblueb "1;36" "lightblueb"
+}
+
+function colortest {
+  if [[ -n "$1" ]]; then
+    T="$1"
+  fi
+  T='gYw'   # The test text
+
+  echo -e "\n                 40m     41m     42m     43m\
+       44m     45m     46m     47m";
+
+  for FGs in '    m' '   1m' '  30m' '1;30m' '  31m' '1;31m' '  32m' \
+             '1;32m' '  33m' '1;33m' '  34m' '1;34m' '  35m' '1;35m' \
+             '  36m' '1;36m' '  37m' '1;37m';
+    do FG=${FGs// /}
+    echo -en " $FGs ${colorstartsequence}$FG  $T  "
+    for BG in 40m 41m 42m 43m 44m 45m 46m 47m;
+      do echo -en "$EINS ${colorstartsequence}$FG${colorstartsequence}$BG  $T  ${endcolorisation}";
+    done
+    echo;
+  done
+  echo
+}
