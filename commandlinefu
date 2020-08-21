@@ -1,0 +1,55 @@
+# ------------------------------------------------------------
+# yum remove for AWX postgresql96
+# ------------------------------------------------------------
+
+yum remove $(yum list installed |grep postgresql96 | awk '{ print $1}')
+
+# ------------------------------------------------------------
+# check for open port
+# ------------------------------------------------------------
+
+echo > /dev/tcp/127.0.0.123/8085 && echo "Port is open"
+
+# ------------------------------------------------------------
+# port forwarding
+# ------------------------------------------------------------
+
+ssh -L8888:localhost:80 {{user}}@{{server}}
+
+# ------------------------------------------------------------
+# grep from config anything that doesnt start with #, then cut all empty lines
+# ------------------------------------------------------------
+
+cat postgresql.conf |grep -v ^# |grep -v '^[[:space:]]*#' | awk 'NF'
+
+# ------------------------------------------------------------
+# return list of groups a user belongs to as a list.
+# ------------------------------------------------------------
+
+id $USERNAME |sed 's/,/\n/g'
+
+# ------------------------------------------------------------
+# reconnecting a host to the AD.
+# ------------------------------------------------------------
+
+net ads join -U $ADMIN_USERNAME
+
+# ------------------------------------------------------------
+# deleting certain pw containing mount attempts from bash history
+# ------------------------------------------------------------
+
+for i in $(history | grep $USERNAME | grep mount | grep -v grep | sort -r |  awk '{ print $1}'); do history -d $i ; done
+
+# ------------------------------------------------------------
+# check the commands used by user $USERNAME verbatim
+# ------------------------------------------------------------
+
+journalctl | grep $USERNAME | grep 'COMMAND=' | sed -n -e 's/^.*COMMAND=//p'
+journalctl | grep $USERNAME | grep 'COMMAND=' | sed -n -e 's/^.*COMMAND=//p' |  awk '{ print $1}' |sort | uniq
+
+
+# ------------------------------------------------------------
+# show git commit history
+# ------------------------------------------------------------
+
+git reflog show | grep '}: commit' | nl | sort -nr | nl | sort -nr | cut --fields=1,3 | sed s/commit://g | sed -e 's/HEAD*@{[0-9]*}://g'
